@@ -29,6 +29,25 @@ function L(tag){
         _log(message);
     };
 
+    log.t = log.trace = function(message){
+        _log(message, 'trace');
+    };
+
+    log.d = log.debug = function(message){
+        _log(message, 'debug');
+    };
+
+    log.i = log.info = function(message){
+        _log(message, 'info');
+    };
+
+    log.w = log.warn = function(message){
+        _log(message, 'warn');
+    };
+
+    log.e = log.error = function(message){
+        _log(message, 'error');
+    };
 
     log.level = function (l){
         level = (Object.keys(levels).indexOf(l) === -1) ? undefined : l;
