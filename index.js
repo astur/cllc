@@ -1,8 +1,12 @@
+var strftime = require('strftime');
 var chalk = require('chalk');
 function L(tag){
+    var dateFormat = '%T';
+
     var _log = function(message, l){
         var a = [];
 
+        a.push(chalk.white('[' + strftime(dateFormat) + ']'));
         tag && a.push(chalk.cyan('(' + tag + ')'));
         message && a.push(chalk.gray(message));
 
@@ -11,6 +15,11 @@ function L(tag){
 
     var log = function(message){
         _log(message);
+    };
+
+
+    log.dateFormat = function (dF){
+        dateFormat = (typeof dF === 'string') ? dF : dateFormat;
     };
 
     log.tag = function (t){
