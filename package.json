@@ -1,0 +1,28 @@
+{
+  "private": true,
+  "name": "cllc",
+  "version": "0.0.0",
+  "description": "Simple logger and counter fore console",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo 'no tests yet'"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/astur/cllc.git"
+  },
+  "bugs": {
+    "url": "https://github.com/astur/cllc/issues"
+  },
+  "homepage": "https://github.com/astur/cllc",
+  "dependencies": {
+    "chalk": "^1.1.1",
+    "strftime": "^0.9.2"
+  },
+  "keywords": [
+    "logger",
+    "cli"
+  ],
+  "author": "astur <astur@yandex.ru> (http://kozlov.am/)",
+  "license": "MIT"
+}
