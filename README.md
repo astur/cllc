@@ -1,6 +1,6 @@
 # cllc
 
-Simple logger and counter fore console
+Simple logger and counter for console
 
 [![NPM version][npm-image]][npm-url]
 
@@ -12,7 +12,7 @@ npm install cllc
 
 ## Usage
 
-There is logger and counter two-in-one. And logger messages do not erase counter string. Perfect for work process indication in long-time scripts.
+There is a logger and counter two-in-one. And log messages do not erase counter string. Perfect for work process indication in long-time scripts.
 
 ### Logger
 
@@ -26,19 +26,17 @@ log('Sample message');
 
 #### Timestamps
 
-Timestamps are formatting by [strftime](https://github.com/samsonjs/strftime). By default format string is `'%T'`, but you can cahge it at any time. Like this:
+Timestamps are formatting by [strftime](https://github.com/samsonjs/strftime). By default format string is `'%T'`, but you can change it at any time. Like this:
 
 ```js
 log.dateFormat('%F %T');
 ```
 
-Any string are correct, even if it doesn't contain any formatting symbols at all. But if parametr of `log.dateFormat` is not a string - nothing will change.
+Any string are correct, even if it doesn't contain any formatting symbols at all. But if parameter of `log.dateFormat` is not a string - nothing will change.
 
 #### Log level labels
 
 Default log level label is empty (nothing printed) but you can set default label or specify it explicitly for every log string.
-
-Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`.
 
 ```js
 log('log string with default log level label');
@@ -53,7 +51,7 @@ log.level('error'); //set default log level label to <ERROR>
 log.level(); //set empty default log level label
 ```
 
-Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`. Any other parametr in `log.level` sets empty default log level label.
+Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`. Any other parameter in `log.level` sets empty default log level label.
 
 #### Logger tags
 
@@ -68,7 +66,7 @@ log.tag();
 log('log string with no tag');
 ```
 
-You can use `module` variable on `cllc` init or as parametr of `log.tag`. In that case module filename and dir will be in tag.
+You can use `module` variable on `cllc` init or as parameter of `log.tag`. In that case module filename and dir will be in tag.
 
 ```js
 var log = require('cllc')(module);
@@ -80,7 +78,7 @@ log('log string with something like "my-module/index" in tag');
 It's important, that log message is not required. `cllc` can output string with only timestamp (and label/tag if not empty). Also important, that `cllc` logger is not `console.log` so only first parameter is used (with `toString`). This logger is for easy and short messages.
 
 ```js
-log('This is a log message string', 'This parametr will be ignored');
+log('This is a log message string', 'This parameter will be ignored');
 log(); //log string without message
 log({a:1,b:2}); //log message will be '[object Object]'. Use strings.
 ```
