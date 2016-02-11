@@ -45,28 +45,28 @@ function L(tag){
         }
     };
 
-    var log = function(message){
-        _log(message);
+    var log = function(){
+        _log([].slice.call(arguments, 0).join(' '));
     };
 
-    log.t = log.trace = function(message){
-        _log(message, 'trace');
+    log.t = log.trace = function(){
+        _log([].slice.call(arguments, 0).join(' '), 'trace');
     };
 
-    log.d = log.debug = function(message){
-        _log(message, 'debug');
+    log.d = log.debug = function(){
+        _log([].slice.call(arguments, 0).join(' '), 'debug');
     };
 
-    log.i = log.info = function(message){
-        _log(message, 'info');
+    log.i = log.info = function(){
+        _log([].slice.call(arguments, 0).join(' '), 'info');
     };
 
-    log.w = log.warn = function(message){
-        _log(message, 'warn');
+    log.w = log.warn = function(){
+        _log([].slice.call(arguments, 0).join(' '), 'warn');
     };
 
-    log.e = log.error = function(message){
-        _log(message, 'error');
+    log.e = log.error = function(){
+        _log([].slice.call(arguments, 0).join(' '), 'error');
     };
 
     log.start = function(text, i){
