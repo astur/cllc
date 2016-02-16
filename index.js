@@ -9,13 +9,13 @@ var levels = {
     error: chalk.white.bold.bgRed('<ERROR>')
 };
 
-function L(tag){
-    var dateFormat = '%T';
-    var level;
-
     var _i = 0;
     var _text = '%s';
     var _visible = false;
+
+function L(tag){
+    var dateFormat = '%T';
+    var level;
 
     var _show = function(){
         process.stdout.write(_text.replace(/%s/, chalk.white(_i)) + '\r');
