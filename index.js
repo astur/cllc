@@ -12,6 +12,7 @@ var levels = {
     var _i = 0;
     var _text = '%s';
     var _visible = false;
+    var _counting = false;
 
 function L(tag){
     var dateFormat = '%T';
@@ -70,30 +71,37 @@ function L(tag){
     };
 
     log.start = function(text, i){
+        _counting = true;
         _text = text || _text;
         _i = i || _i;
         _show();
     };
 
     log.step = function(i){
-        i = i || 1;
-        _i = _i + i;
-        _show();
+        if (_counting) {
+            i = i || 1;
+            _i = _i + i;
+            _show();
+        }
     };
 
     log.stop = function(){
+        _counting = false;
         _hide();
         _i = 0;
         _text = '%s';
     };
 
     log.finish = function(text, i){
-        _hide();
-        _text = text || _text;
-        _i = i || _i;
-        console.log(_text.replace(/%s/, chalk.white(_i)));
-        _i = 0;
-        _text = '%s';
+        if (_counting) {
+            _counting = false;
+            _hide();
+            _text = text || _text;
+            _i = i || _i;
+            console.log(_text.replace(/%s/, chalk.white(_i)));
+            _i = 0;
+            _text = '%s';
+        }
     };
 
     log.level = function (l){
