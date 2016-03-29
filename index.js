@@ -28,47 +28,26 @@ function L(tag){
         _visible = false;
     };
 
-    var _log = function(message, l){
-        var a = [];
-        l = Object.keys(levels).indexOf(l) === -1 ? level : l;
+    var _log = function(l){
+        return function(){
+            var a = [chalk.white('[' + strftime(dateFormat) + ']')];
+            (Object.keys(levels).indexOf(l) === -1 ? level : l) && a.push(levels[l]);
+            tag && a.push(chalk.cyan('(' + tag + ')'));
+            [].slice.call(arguments, 1).forEach(function(v){a.push(chalk.gray(v))});
 
-        a.push(chalk.white('[' + strftime(dateFormat) + ']'));
-        l && a.push(levels[l]);
-        tag && a.push(chalk.cyan('(' + tag + ')'));
-        message && a.push(chalk.gray(message));
-
-        if (_visible) {
-            _hide();
-            console.log(a.join(' '));
-            _show();
-        } else {
-            console.log(a.join(' '));
+            _visible && _hide();
+            console.log.apply(null, a);
+            _visible && _show();
         }
     };
 
-    var log = function(){
-        _log([].slice.call(arguments, 0).join(' '));
-    };
+    var log = _log();
 
-    log.t = log.trace = function(){
-        _log([].slice.call(arguments, 0).join(' '), 'trace');
-    };
-
-    log.d = log.debug = function(){
-        _log([].slice.call(arguments, 0).join(' '), 'debug');
-    };
-
-    log.i = log.info = function(){
-        _log([].slice.call(arguments, 0).join(' '), 'info');
-    };
-
-    log.w = log.warn = function(){
-        _log([].slice.call(arguments, 0).join(' '), 'warn');
-    };
-
-    log.e = log.error = function(){
-        _log([].slice.call(arguments, 0).join(' '), 'error');
-    };
+    log.t = log.trace = _log('trace');
+    log.d = log.debug = _log('debug');
+    log.i = log.info = _log('info');
+    log.w = log.warn = _log('warn');
+    log.e = log.error = _log('error');
 
     log.start = function(text, i){
         _counting = true;
