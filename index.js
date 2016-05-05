@@ -33,7 +33,7 @@ function L(tag){
             var a = [chalk.white('[' + strftime(dateFormat) + ']')];
             (Object.keys(levels).indexOf(l) === -1 ? level : l) && a.push(levels[l]);
             tag && a.push(chalk.cyan('(' + tag + ')'));
-            [].slice.call(arguments, 1).forEach(function(v){a.push(chalk.gray(v))});
+            [].slice.call(arguments, 0).forEach(function(v){a.push(chalk.gray(v))});
 
             _visible && _hide();
             console.log.apply(null, a);
