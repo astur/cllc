@@ -92,11 +92,15 @@ Counter is a last string on console, where digital value in string are increment
 log.start();
 // //or//
 // log.start('%s tasks done.', 0);
+// //or//
+// log.start('%s foo, %s bar, %s baz', 0, 1, 2);
 
 // Increment counter
 log.step();
 // //or//
 // log.step(5);
+// //or//
+// log.step(0, 0, 1);
 
 // Safe logger
 log('TEST');
@@ -107,6 +111,8 @@ log.stop(); // stop and clear
 // log.finish(); // stop and save last string
 // //or//
 // log.finish('Well done %s tasks!', 100); // stop with special string
+// //or//
+// log.finish('%s foo, %s bar, %s baz', 100, 200, 300); // stop with special string
 ```
 
 ## License
