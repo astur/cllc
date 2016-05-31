@@ -9,22 +9,30 @@ var levels = {
     error: chalk.white.bold.bgRed('<ERROR>')
 };
 
-    var _i = 0;
-    var _text = '%s';
-    var _visible = false;
-    var _counting = false;
+var _i;
+var _text;
+var _visible = false;
+var _counting = false;
+
+function _countStr(){
+    var t = _text;
+    for (var i = 0; i < _i.length; i++) {
+        t = t.replace(/%s/, chalk.white(_i[i]));
+    };
+    return t;
+}
 
 function L(tag){
     var dateFormat = '%T';
     var level;
 
     var _show = function(){
-        process.stdout.write(_text.replace(/%s/, chalk.white(_i)) + '\r');
+        process.stdout.write(_countStr() + '\r');
         _visible = true;
     };
 
     var _hide = function(){
-        process.stdout.write(Array(_text.replace(/%s/, _i).length + 1).join(' ') + '\r');
+        process.stdout.write(Array(_countStr().length + 1).join(' ') + '\r');
         _visible = false;
     };
 
@@ -49,17 +57,21 @@ function L(tag){
     log.w = log.warn = _log('warn');
     log.e = log.error = _log('error');
 
-    log.start = function(text, i){
+    log.start = function(){
         _counting = true;
-        _text = text || _text;
-        _i = i || _i;
+        _i = [].slice.call(arguments);
+        _text = _i.shift() || '%s';
+        var tl = _text.split(/%s/).length - 1 || 1;
+        tl > _i.length && (_i = _i.concat(Array(tl).fill(0)));
         _show();
     };
 
-    log.step = function(i){
+    log.step = function(){
         if (_counting) {
-            i = i || 1;
-            _i = _i + i;
+            arguments[0] = arguments.length ? arguments[0] : 1;
+            for (var i = 0; i < _i.length; i++) {
+                _i[i] += +arguments[i] || 0;
+            }
             _show();
         }
     };
@@ -67,19 +79,18 @@ function L(tag){
     log.stop = function(){
         _counting = false;
         _hide();
-        _i = 0;
-        _text = '%s';
     };
 
-    log.finish = function(text, i){
+    log.finish = function(){
         if (_counting) {
             _counting = false;
             _hide();
-            _text = text || _text;
-            _i = i || _i;
-            console.log(_text.replace(/%s/, chalk.white(_i)));
-            _i = 0;
-            _text = '%s';
+            var args = [].slice.call(arguments);
+            _text = args.shift() || _text;
+            for (var i = 0; i < _i.length; i++) {
+                typeof args[i] === 'number' && (_i[i] = args[i]);
+            };
+            console.log(_countStr());
         }
     };
 
