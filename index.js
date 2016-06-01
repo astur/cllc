@@ -43,9 +43,13 @@ function L(tag){
             tag && a.push(chalk.cyan('(' + tag + ')'));
             [].slice.call(arguments, 0).forEach(function(v){a.push(chalk.gray(v))});
 
-            _visible && _hide();
-            console.log.apply(null, a);
-            _visible && _show();
+            if (_visible) {
+                _hide();
+                console.log.apply(null, a);
+                _show();
+            } else {
+                console.log.apply(null, a);
+            }
         }
     };
 
