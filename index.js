@@ -11,8 +11,8 @@ const levels = {
     error: chalk.white.bold.bgRed('<ERROR>'),
 };
 
-let _i;
-let _text;
+let _i = [];
+let _text = '';
 let _visible = false;
 let _counting = false;
 
@@ -66,6 +66,7 @@ function L(tag){
     log.e = log.error = _log('error');
 
     log.start = function(text = '%s', ...args){
+        if(!process.stdout.isTTY) return;
         _counting = true;
         _i = args;
         _text = text;
@@ -85,6 +86,7 @@ function L(tag){
     };
 
     log.stop = function(){
+        if(!process.stdout.isTTY) return;
         _counting = false;
         _hide();
     };
