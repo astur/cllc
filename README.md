@@ -32,7 +32,16 @@ Timestamps are formatting by [strftime](https://github.com/samsonjs/strftime). B
 log.dateFormat('%F %T');
 ```
 
-Any string are correct, even if it doesn't contain any formatting symbols at all. But if parameter of `log.dateFormat` is not a string - nothing will change.
+Any string are correct, even if it doesn't contain any formatting symbols at all.
+
+If you want to disable timestamps just use any falsy value.  Like this:
+
+```js
+log.dateFormat('');
+// //or//
+log.dateFormat();
+```
+Any parameter of `log.dateFormat` that is not a string or falsy  will be ignored.
 
 #### Log level labels
 

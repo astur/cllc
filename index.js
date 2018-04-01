@@ -38,7 +38,8 @@ function L(tag){
 
     const _log = function(l){
         return function(...args){
-            const a = [chalk.white(`[${strftime(dateFormat)}]`)];
+            const a = [];
+            if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
             if(Object.keys(levels).indexOf(l) === -1 ? level : l) a.push(levels[l]);
             if(tag) a.push(chalk.cyan(`(${tag})`));
             a.push(...args.map(v => chalk.gray(v)));
@@ -102,7 +103,7 @@ function L(tag){
     };
 
     log.dateFormat = function(dF){
-        dateFormat = typeof dF === 'string' ? dF : dateFormat;
+        dateFormat = typeof dF === 'string' || !dF ? dF : dateFormat;
     };
 
     log.tag = function(t){
