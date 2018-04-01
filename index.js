@@ -108,7 +108,7 @@ function L(tag){
 
     log.tag = function (t){
         tag = (t && t.id && t.exports && t.filename && t.paths)
-            ? t.filename.split('/').slice(-2).join('/').split('.')[0]
+            ? t.filename.split(/[\\\/]/).slice(-2).join('/').split('.')[0]
             : (typeof t === 'string' ? t : undefined);
     };
 
