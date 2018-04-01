@@ -32,7 +32,7 @@ function L(tag){
     };
 
     const _hide = function(){
-        process.stdout.write(`${''.repeat(_countStr().length)}\r`);
+        process.stdout.write(`${' '.repeat(_countStr().length)}\r`);
         _visible = false;
     };
 
