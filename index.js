@@ -39,8 +39,9 @@ function L(tag){
     const _log = function(l){
         return function(...args){
             const a = [];
+            const ll = levels[l] || levels[level];
             if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
-            if(Object.keys(levels).indexOf(l) === -1 ? level : l) a.push(levels[l]);
+            if(ll) a.push(ll);
             if(tag) a.push(chalk.cyan(`(${tag})`));
             a.push(...args.map(v => chalk.gray(v)));
 
