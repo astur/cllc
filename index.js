@@ -1,6 +1,8 @@
 const strftime = require('strftime');
 const chalk = require('chalk');
 
+chalk.enabled = !!process.stdout.isTTY;
+
 const levels = {
     trace: chalk.white.bold.bgBlack('<TRACE>'),
     debug: chalk.white.bold.bgGreen('<DEBUG>'),
