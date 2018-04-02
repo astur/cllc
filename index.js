@@ -1,6 +1,7 @@
 const strftime = require('strftime');
 const chalk = require('chalk');
 const format = require('util').format;
+const lU = require('log-update');
 
 chalk.enabled = !!process.stdout.isTTY;
 
@@ -14,26 +15,17 @@ const _levels = {
 
 let _i = [];
 let _text = '';
-let _visible = false;
 
 const _countStr = () => _text
     .split(/%s/)
     .map((v, i) => v + (_i[i] ? chalk.white(_i[i]) : ''))
     .join('');
 
+lU.show = () => lU(_countStr());
+
 module.exports = function(tag){
     let dateFormat = '%T';
     let level;
-
-    const _show = () => {
-        process.stdout.write(`${_countStr()}\r`);
-        _visible = true;
-    };
-
-    const _hide = () => {
-        process.stdout.write(`${' '.repeat(_countStr().length)}\r`);
-        _visible = false;
-    };
 
     const _log = l => (...args) => {
         const a = [];
@@ -44,13 +36,9 @@ module.exports = function(tag){
         if(tag) a.push(chalk.cyan(`(${tag})`));
         a.push(chalk.gray(format(...args)));
 
-        if(_visible){
-            _hide();
-            console.log(...a);
-            _show();
-        } else {
-            console.log(...a);
-        }
+        if(_text) lU.clear();
+        console.log(...a);
+        if(_text) lU.show();
     };
 
     const log = _log();
@@ -83,30 +71,30 @@ module.exports = function(tag){
         const tl = _text.split(/%s/).length - 1 || 1;
         args = args.length ? args.map(v => +v || 0) : [1];
         _i = Object.assign(Array(tl).fill(0), args.slice(0, tl));
-        _show();
+        lU.show();
     };
 
     log.step = (...args) => {
-        if(!_text) return;
+        if(!process.stdout.isTTY || !_text) return;
         args = args.length ? args : [1];
         _i = _i.map((v, i) => v + (+args[i] || 0));
-        _show();
+        lU.show();
     };
 
     log.stop = () => {
-        if(!process.stdout.isTTY) return;
+        if(!process.stdout.isTTY || !_text) return;
         _text = '';
-        _hide();
+        lU.clear();
     };
 
     log.finish = (text = _text, ...args) => {
-        if(!_text) return;
-        _hide();
+        if(!process.stdout.isTTY || !_text) return;
         _text = text;
         args = args.length ? args.map(v => +v || 0) : [];
         _i = Object.assign(_i, args.slice(0, _i.length));
-        console.log(_countStr());
+        lU.show();
         _text = '';
+        lU.done();
     };
 
     return log;
