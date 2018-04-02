@@ -84,12 +84,12 @@ log('log string with something like "my-module/index" in tag');
 
 #### Log messages
 
-It's important, that log message is not required. `cllc` can output string with only timestamp (and label/tag if not empty). Also important, that `cllc` logger is not `console.log` so parameters is just concatenated (with `toString` and `join(' ')`). This logger is for easy and short messages.
+It's important, that log message is not required. `cllc` can output string with only timestamp/label/tag (if not empty). If any params sent to `log*` functions then log message will be created same way as in `util.format`.
 
 ```js
 log('This is a log message string', 'This is another log message string');
 log(); //log string without message
-log({a:1,b:2}); //log message will be '[object Object]'. Use strings.
+log({a: 1}, [1, 2], new Date(), null); // same way as in `util.format`
 ```
 
 ### Counter
