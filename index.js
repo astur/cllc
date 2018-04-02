@@ -36,8 +36,8 @@ module.exports = function(tag){
         if(tag) a.push(chalk.cyan(`(${tag})`));
         a.push(chalk.gray(format(...args)));
 
-        if(_text) lU.clear();
-        console.log(...a);
+        lU(...a);
+        lU.done();
         if(_text) lU.show();
     };
 
