@@ -1,5 +1,6 @@
 const strftime = require('strftime');
 const chalk = require('chalk');
+const format = require('util').format;
 
 chalk.enabled = !!process.stdout.isTTY;
 
@@ -41,7 +42,7 @@ module.exports = function(tag){
         if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
         if(ll) a.push(ll);
         if(tag) a.push(chalk.cyan(`(${tag})`));
-        a.push(...args.map(v => chalk.gray(v)));
+        a.push(chalk.gray(format(...args)));
 
         if(_visible){
             _hide();
