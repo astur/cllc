@@ -18,7 +18,7 @@ let _text = '';
 
 const _countStr = () => _text
     .split(/%s/)
-    .map((v, i) => v + (_i[i] ? chalk.white(_i[i]) : ''))
+    .map((v, i) => v + (i === _i.length ? '' : chalk.white(_i[i])))
     .join('');
 
 lU.show = () => lU(_countStr());
@@ -68,9 +68,10 @@ module.exports = function(tag){
     log.start = (text = '%s', ...args) => {
         if(!process.stdout.isTTY || !text || typeof text !== 'string') return;
         _text = text;
-        const tl = _text.split(/%s/).length - 1 || 1;
-        args = args.length ? args.map(v => +v || 0) : [1];
-        _i = Object.assign(Array(tl).fill(0), args.slice(0, tl));
+        const tl = _text.split(/%s/).length - 1;
+        const zeros = Array(tl).fill(0);
+        args = args.length ? args.map(v => +v || 0) : zeros;
+        _i = Object.assign(zeros, args.slice(0, tl));
         lU.show();
     };
 
