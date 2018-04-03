@@ -1,6 +1,8 @@
 # cllc
 
-Simple logger and counter for console
+`C`ommand `L`ine `L`ogger and `C`ounter
+
+There is a logger and counter two-in-one. And log messages do not erase counter text. Perfect for work process indication in long-time scripts.
 
 [![NPM version][npm-image]][npm-url]
 
@@ -12,14 +14,12 @@ npm install cllc
 
 ## Usage
 
-There is a logger and counter two-in-one. And log messages do not erase counter string. Perfect for work process indication in long-time scripts.
-
 ### Logger
 
 Logger output to console log string that consists of timestamp, log level label, logger tag and log message. Only timestamp is not optional.
 
 ```js
-var log = require('cllc')();
+const log = require('cllc')();
 
 log('Sample message');
 ```
@@ -67,7 +67,7 @@ Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`. Any 
 Usually tags used if you want to identify several loggers from different modules or functions. Tag is just a short string. By default tag is empty, but you can specify it any time. Like this:
 
 ```js
-var log = require('cllc')('TAG1');
+const log = require('cllc')('TAG1');
 log('log string with tag "TAG1"');
 log.tag('Tag2');
 log('log string with tag "Tag2"');
@@ -78,7 +78,7 @@ log('log string with no tag');
 You can use `module` variable on `cllc` init or as parameter of `log.tag`. In that case module filename and dir will be in tag.
 
 ```js
-var log = require('cllc')(module);
+const log = require('cllc')(module);
 log('log string with something like "my-module/index" in tag');
 ```
 
@@ -94,34 +94,66 @@ log({a: 1}, [1, 2], new Date(), null); // same way as in `util.format`
 
 ### Counter
 
-Counter is a last string on console, where digital value in string are incrementing step by step. If counter are visible - log strings appears on second string from bottom.
+Counter is a text in the end of console, contains digital value(s) that are incrementing step by step.
+
+#### Start counter
 
 ```js
-// Start counter
-log.start();
+log.start(); //same as log.start('%s');
 // //or//
 // log.start('%s tasks done.', 0);
 // //or//
 // log.start('%s foo, %s bar, %s baz', 0, 1, 2);
+```
 
-// Increment counter
-log.step();
+#### Increment counter
+
+```js
+log.step(); // same as step(1);
 // //or//
 // log.step(5);
 // //or//
 // log.step(0, 0, 1);
+```
 
-// Safe logger
-log('TEST');
+#### Stop counter
 
-// Stop counter
+```js
 log.stop(); // stop and clear
 // //or//
-// log.finish(); // stop and save last string
+// log.finish(); // stop and save counter text
 // //or//
-// log.finish('Well done %s tasks!', 100); // stop with special string
+// log.finish('Well done %s tasks!', 100); // stop with special text
 // //or//
-// log.finish('%s foo, %s bar, %s baz', 100, 200, 300); // stop with special string
+// log.finish('%s foo, %s bar, %s baz', 100, 200, 300); // stop with special text
+```
+
+#### Restart/change counter
+
+Calling `log.start` starting new counter with new text and new values. If another counter was active on that moment it will be destroyed silently (if you want save it - call `log.finish` before start next counter).
+
+Current counter text and values are availiable via `log.text` and `log.counters` functions.
+
+```js
+log.start('First counter [%s][%s]', 1, 5);
+// do something like `log.step` here
+// then:
+log start(doSomething(log.text()), ...doSomethingElse(log.counters()));
+```
+
+#### Safe logger
+
+If counter are visible - log strings appear on string above counter text and will not be erased by counter. So use `log` from `cllc` instead `console.log` when counter active.
+
+```js
+log.start('[%s]');
+log.step();
+log('TEST');
+log.finish();
+
+// result output
+// TEST
+// [0]
 ```
 
 ## License
