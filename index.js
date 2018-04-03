@@ -98,5 +98,8 @@ module.exports = function(tag){
         lU.done();
     };
 
+    log.counters = () => _i.slice();
+    log.text = () => _text;
+
     return log;
 };
