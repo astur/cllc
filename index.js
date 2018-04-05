@@ -82,6 +82,12 @@ module.exports = function(tag){
         lU.show();
     };
 
+    log.inc = n => {
+        if(!process.stdout.isTTY || !_text) return;
+        _i = _i.map((v, i) => v + (i === n - 1));
+        lU.show();
+    };
+
     log.stop = () => {
         if(!process.stdout.isTTY || !_text) return;
         _text = '';

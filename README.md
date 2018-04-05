@@ -116,6 +116,14 @@ log.step(); // same as step(1);
 // log.step(0, 0, 1);
 ```
 
+Or another way:
+
+```js
+log.inc(1); // same as step(1);
+// //or//
+// log.inc(3); // same as step(0, 0, 1)
+```
+
 #### Stop counter
 
 ```js
