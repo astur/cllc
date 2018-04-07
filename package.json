@@ -1,6 +1,6 @@
 {
   "name": "cllc",
-  "version": "0.0.16",
+  "version": "0.1.0",
   "description": "Simple logger and counter fore console",
   "main": "index.js",
   "scripts": {
