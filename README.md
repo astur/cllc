@@ -20,6 +20,8 @@ Logger output to console log string that consists of timestamp, log level label,
 
 ```js
 const log = require('cllc')();
+// //or//
+// const log = require('cllc')('TAG', '%F %T'); // default tag and date format (see below)
 
 log('Sample message');
 ```
@@ -27,6 +29,15 @@ log('Sample message');
 #### Timestamps
 
 Timestamps are formatting by [strftime](https://github.com/samsonjs/strftime). By default format string is `'%T'`, but you can change it at any time. Like this:
+
+```js
+const log = require('cllc')(null, '%F %T');
+log('log string with date format "%F %T"');
+log.dateFormat('%F');
+log('log string with date format "%F"');
+log.dateFormat();
+log('log string with no date displayed');
+```
 
 ```js
 log.dateFormat('%F %T');
