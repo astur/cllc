@@ -23,8 +23,7 @@ const _countStr = () => _text
 
 lU.show = () => lU(_countStr());
 
-module.exports = function(tag){
-    let dateFormat = '%T';
+module.exports = function(tag, dateFormat = '%T'){
     let level;
 
     const _log = l => (...args) => {
