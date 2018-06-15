@@ -21,6 +21,7 @@
     "strftime": "^0.10.0"
   },
   "devDependencies": {
+    "ansi-escapes": "^3.1.0",
     "ansi-styles": "^3.2.1",
     "ava": "^0.25.0",
     "eslint": "^4.7.2",
