@@ -23,3 +23,16 @@ test('log', t => {
     t.deepEqual(inspect.output[0].match(re), [styles.color.gray.open, styles.color.gray.close]);
     t.deepEqual(inspect.output[1].match(re), [styles.color.gray.open, styles.color.gray.close]);
 });
+
+test('dateFormat', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, '%F');
+    log();
+    log.dateFormat('TEST');
+    log();
+    inspect.restore();
+    t.true(/^\[\d\d\d\d-\d\d-\d\d\]/.test(inspect.output[0].replace(re, '')));
+    t.is(inspect.output[1].replace(re, ''), '[TEST]\n');
+    t.deepEqual(inspect.output[0].match(re), [styles.color.white.open, styles.color.white.close]);
+    t.deepEqual(inspect.output[1].match(re), [styles.color.white.open, styles.color.white.close]);
+});
