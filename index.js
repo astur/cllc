@@ -3,8 +3,6 @@ const chalk = require('chalk');
 const format = require('util').format;
 const lU = require('log-update');
 
-chalk.enabled = !!process.stdout.isTTY;
-
 const _levels = {
     trace: chalk.white.bold.bgBlack('<TRACE>'),
     debug: chalk.white.bold.bgGreen('<DEBUG>'),
@@ -35,7 +33,7 @@ module.exports = function(tag, dateFormat = '%T'){
         if(tag) a.push(chalk.cyan(`(${tag})`));
         if(args.length) a.push(chalk.gray(format(...args)));
 
-        lU(...a);
+        lU(...process.stdout.isTTY ? a : a.map(s => s.replace(require('ansi-regex')(), '')));
         lU.done();
         if(_text) lU.show();
     };
