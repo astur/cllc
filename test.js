@@ -12,7 +12,7 @@ test('empty', t => {
     t.is(inspect.output[0], '\n');
 });
 
-test('log', t => {
+test('simple log', t => {
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log('TEST');
@@ -106,5 +106,27 @@ test('levels', t => {
         styles.bgColor.bgRed.close,
         styles.modifier.bold.close,
         styles.color.white.close,
+    ]);
+});
+
+test('full log', t => {
+    const inspect = stdout.inspect();
+    const log = cllc('TAG');
+    log.i('TEST');
+    inspect.restore();
+    t.true(/^\[\d\d:\d\d:\d\d\] <INFO> \(TAG\) TEST/.test(inspect.output[0].replace(re, '').trim()));
+    t.deepEqual(inspect.output[0].match(re), [
+        styles.color.white.open,
+        styles.color.white.close,
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgBlue.open,
+        styles.bgColor.bgBlue.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+        styles.color.cyan.open,
+        styles.color.cyan.close,
+        styles.color.gray.open,
+        styles.color.gray.close,
     ]);
 });
