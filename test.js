@@ -52,3 +52,59 @@ test('tags', t => {
     t.is(inspect.output[2].replace(re, ''), '(test)\n');
     t.deepEqual(inspect.output[2].match(re), [styles.color.cyan.open, styles.color.cyan.close]);
 });
+
+test('levels', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, null);
+    log.t();
+    log.d();
+    log.i();
+    log.w();
+    log.e();
+    inspect.restore();
+    t.is(inspect.output[0].replace(re, ''), '<TRACE>\n');
+    t.deepEqual(inspect.output[0].match(re), [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgBlack.open,
+        styles.bgColor.bgBlack.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ]);
+    t.is(inspect.output[1].replace(re, ''), '<DEBUG>\n');
+    t.deepEqual(inspect.output[1].match(re), [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgGreen.open,
+        styles.bgColor.bgGreen.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ]);
+    t.is(inspect.output[2].replace(re, ''), '<INFO>\n');
+    t.deepEqual(inspect.output[2].match(re), [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgBlue.open,
+        styles.bgColor.bgBlue.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ]);
+    t.is(inspect.output[3].replace(re, ''), '<WARN>\n');
+    t.deepEqual(inspect.output[3].match(re), [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgYellow.open,
+        styles.bgColor.bgYellow.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ]);
+    t.is(inspect.output[4].replace(re, ''), '<ERROR>\n');
+    t.deepEqual(inspect.output[4].match(re), [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor.bgRed.open,
+        styles.bgColor.bgRed.close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ]);
+});
