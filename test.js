@@ -36,3 +36,19 @@ test('dateFormat', t => {
     t.deepEqual(inspect.output[0].match(re), [styles.color.white.open, styles.color.white.close]);
     t.deepEqual(inspect.output[1].match(re), [styles.color.white.open, styles.color.white.close]);
 });
+
+test('tags', t => {
+    const inspect = stdout.inspect();
+    const log = cllc('TEST', null);
+    log();
+    log.tag();
+    log();
+    log.tag('test');
+    log();
+    inspect.restore();
+    t.is(inspect.output[0].replace(re, ''), '(TEST)\n');
+    t.deepEqual(inspect.output[0].match(re), [styles.color.cyan.open, styles.color.cyan.close]);
+    t.false(re.test(inspect.output[1]));
+    t.is(inspect.output[2].replace(re, ''), '(test)\n');
+    t.deepEqual(inspect.output[2].match(re), [styles.color.cyan.open, styles.color.cyan.close]);
+});
