@@ -3,6 +3,7 @@
   "version": "0.1.1",
   "description": "Simple logger and counter fore console",
   "main": "index.js",
+  "author": "astur <astur@yandex.ru> (http://kozlov.am/)",
   "scripts": {
     "test": "eslint ."
   },
@@ -10,26 +11,21 @@
     "type": "git",
     "url": "https://github.com/astur/cllc.git"
   },
-  "bugs": {
-    "url": "https://github.com/astur/cllc/issues"
+  "engines": {
+    "node": ">=8.0.0"
   },
-  "homepage": "https://github.com/astur/cllc",
   "dependencies": {
     "chalk": "^2.3.2",
     "log-update": "^2.3.0",
-    "strftime": "^0.9.2"
+    "strftime": "^0.10.0"
   },
   "devDependencies": {
     "eslint": "^4.7.2",
     "eslint-config-astur": "0.0.2"
   },
-  "engines": {
-    "node": ">=8.0.0"
-  },
   "keywords": [
     "logger",
     "cli"
   ],
-  "author": "astur <astur@yandex.ru> (http://kozlov.am/)",
   "license": "MIT"
 }
