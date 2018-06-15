@@ -33,7 +33,7 @@ module.exports = function(tag, dateFormat = '%T'){
         if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
         if(ll) a.push(ll);
         if(tag) a.push(chalk.cyan(`(${tag})`));
-        a.push(chalk.gray(format(...args)));
+        if(args.length) a.push(chalk.gray(format(...args)));
 
         lU(...a);
         lU.done();
