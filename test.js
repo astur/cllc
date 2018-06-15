@@ -130,3 +130,11 @@ test('full log', t => {
         styles.color.gray.close,
     ]);
 });
+
+test('isTTY false log', t => {
+    const inspect = stdout.inspect({isTTY: false});
+    const log = cllc('TAG');
+    log.i('TEST');
+    inspect.restore();
+    t.false(re.test(inspect.output[0]));
+});
