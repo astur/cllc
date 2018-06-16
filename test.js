@@ -244,9 +244,13 @@ test('counter finishing', t => {
     t.is(inspect.output[3].replace(re, ''), '0\n');
     t.is(inspect.output.length, 4);
     log.start();
-    log.finish('#%s#', 42);
-    t.is(inspect.output[5].replace(re, ''), '#42#\n');
+    log.finish('#%s|%s|%s#', 42, 'bad');
+    t.is(inspect.output[5].replace(re, ''), '#42|0|0#\n');
     t.is(inspect.output.length, 6);
+    log.start();
+    log.finish('#%s|%s|%s#');
+    t.is(inspect.output[7].replace(re, ''), '#0|0|0#\n');
+    t.is(inspect.output.length, 8);
     inspect.restore();
     const codes = [
         escapes.eraseLine,
@@ -262,6 +266,19 @@ test('counter finishing', t => {
     ]);
     t.deepEqual(inspect.output[5].match(re), [
         ...codes,
+        styles.color.white.open,
+        styles.color.white.close,
+        styles.color.white.open,
+        styles.color.white.close,
+        styles.color.white.open,
+        styles.color.white.close,
+    ]);
+    t.deepEqual(inspect.output[7].match(re), [
+        ...codes,
+        styles.color.white.open,
+        styles.color.white.close,
+        styles.color.white.open,
+        styles.color.white.close,
         styles.color.white.open,
         styles.color.white.close,
     ]);
