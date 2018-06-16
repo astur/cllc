@@ -94,8 +94,10 @@ module.exports = function(tag, dateFormat = '%T'){
     log.finish = (text = _text, ...args) => {
         if(!process.stdout.isTTY || !_text) return;
         _text = text;
-        args = args.length ? args.map(v => +v || 0) : [];
-        _i = Object.assign(_i, args.slice(0, _i.length));
+        const tl = _text.split(/%s/).length - 1;
+        const zeros = Array(tl).fill(0);
+        args = args.length ? args.map(v => +v || 0) : zeros;
+        _i = Object.assign(zeros, args.slice(0, tl));
         lU.show();
         _text = '';
         lU.done();
