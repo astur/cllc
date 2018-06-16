@@ -165,6 +165,16 @@ test('isTTY false log', t => {
 });
 
 test('counter start', t => {
+    const white = [
+        styles.color.white.open,
+        styles.color.white.close,
+    ];
+    const erase = [
+        escapes.eraseLine,
+        escapes.cursorUp(),
+        escapes.eraseLine,
+        escapes.cursorLeft,
+    ];
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log.start('#%s|%s#');
@@ -173,24 +183,17 @@ test('counter start', t => {
     log.start();
     t.is(log.text(), '%s');
     t.deepEqual(log.counters(), [0]);
+    log.start('#%s|%s|%s#', 42, 'bad');
+    t.is(log.text(), '#%s|%s|%s#');
+    t.deepEqual(log.counters(), [42, 0, 0]);
     log.stop();
     inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '#0|0#\n');
-    t.deepEqual(inspect.output[0].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[0].match(re), [...white, ...white]);
     t.is(inspect.output[1].replace(re, ''), '0\n');
-    t.deepEqual(inspect.output[1].match(re), [
-        escapes.eraseLine,
-        escapes.cursorUp(),
-        escapes.eraseLine,
-        escapes.cursorLeft,
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[1].match(re), [...erase, ...white]);
+    t.is(inspect.output[2].replace(re, ''), '#42|0|0#\n');
+    t.deepEqual(inspect.output[2].match(re), [...erase, ...white, ...white, ...white]);
 });
 
 test('counter steps', t => {
