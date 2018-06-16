@@ -63,7 +63,7 @@ test('tags', t => {
     log();
     log.tag();
     log();
-    log.tag('test');
+    log.tag(module);
     log();
     inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '(TEST)\n');
@@ -72,7 +72,7 @@ test('tags', t => {
         styles.color.cyan.close,
     ]);
     t.false(re.test(inspect.output[1]));
-    t.is(inspect.output[2].replace(re, ''), '(test)\n');
+    t.is(inspect.output[2].replace(re, ''), '(cllc/test)\n');
     t.deepEqual(inspect.output[2].match(re), [
         styles.color.cyan.open,
         styles.color.cyan.close,
