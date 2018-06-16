@@ -167,6 +167,7 @@ test('counter start', t => {
     log.start();
     t.is(log.text(), '%s');
     t.deepEqual(log.counters(), [0]);
+    log.stop();
     inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '#0|0#\n');
     t.deepEqual(inspect.output[0].match(re), [
