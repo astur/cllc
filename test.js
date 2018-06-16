@@ -187,9 +187,34 @@ test('counter start', t => {
     ]);
 });
 
-/*
-escapes.eraseLine, 2K
-escapes.cursorUp, 1A
-escapes.eraseLine, 2K
-escapes.cursorLeft, G
-*/
+test('counter steps', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, null);
+    log.step(1);
+    log.inc(1);
+    t.is(log.text(), '');
+    t.is(inspect.output.length, 0);
+    log.start('#%s|%s#');
+    t.is(inspect.output.length, 1);
+    log.step();
+    log.step(0, 2);
+    log.inc(1);
+    t.is(inspect.output.length, 4);
+    t.deepEqual(log.counters(), [2, 2]);
+    t.is(inspect.output[3].replace(re, ''), '#2|2#\n');
+    log.stop();
+    inspect.restore();
+    const codes = [
+        escapes.eraseLine,
+        escapes.cursorUp(),
+        escapes.eraseLine,
+        escapes.cursorLeft,
+        styles.color.white.open,
+        styles.color.white.close,
+        styles.color.white.open,
+        styles.color.white.close,
+    ];
+    t.deepEqual(inspect.output[1].match(re), codes);
+    t.deepEqual(inspect.output[2].match(re), codes);
+    t.deepEqual(inspect.output[3].match(re), codes);
+});
