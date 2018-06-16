@@ -218,3 +218,42 @@ test('counter steps', t => {
     t.deepEqual(inspect.output[2].match(re), codes);
     t.deepEqual(inspect.output[3].match(re), codes);
 });
+
+test('counter finishing', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, null);
+    log.stop();
+    log.finish('TEST=%s', 42);
+    t.is(log.text(), '');
+    t.is(inspect.output.length, 0);
+    log.start();
+    log.stop();
+    t.is(inspect.output[1].replace(re, ''), '');
+    t.is(inspect.output.length, 2);
+    log.start();
+    log.finish();
+    t.is(inspect.output[3].replace(re, ''), '0\n');
+    t.is(inspect.output.length, 4);
+    log.start();
+    log.finish('#%s#', 42);
+    t.is(inspect.output[5].replace(re, ''), '#42#\n');
+    t.is(inspect.output.length, 6);
+    inspect.restore();
+    const codes = [
+        escapes.eraseLine,
+        escapes.cursorUp(),
+        escapes.eraseLine,
+        escapes.cursorLeft,
+    ];
+    t.deepEqual(inspect.output[1].match(re), codes);
+    t.deepEqual(inspect.output[3].match(re), [
+        ...codes,
+        styles.color.white.open,
+        styles.color.white.close,
+    ]);
+    t.deepEqual(inspect.output[5].match(re), [
+        ...codes,
+        styles.color.white.open,
+        styles.color.white.close,
+    ]);
+});
