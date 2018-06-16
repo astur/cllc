@@ -73,6 +73,14 @@ test('tags', t => {
 });
 
 test('levels', t => {
+    const badge = color => [
+        styles.color.white.open,
+        styles.modifier.bold.open,
+        styles.bgColor[color].open,
+        styles.bgColor[color].close,
+        styles.modifier.bold.close,
+        styles.color.white.close,
+    ];
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log.t();
@@ -80,52 +88,43 @@ test('levels', t => {
     log.i();
     log.w();
     log.e();
+    log.level('trace');
+    log();
+    log.level('debug');
+    log();
+    log.level('info');
+    log();
+    log.level('warn');
+    log();
+    log.level('error');
+    log();
+    log.level();
+    log();
+    log.level('bad level');
+    log();
     inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '<TRACE>\n');
-    t.deepEqual(inspect.output[0].match(re), [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgBlack.open,
-        styles.bgColor.bgBlack.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[0].match(re), badge('bgBlack'));
     t.is(inspect.output[1].replace(re, ''), '<DEBUG>\n');
-    t.deepEqual(inspect.output[1].match(re), [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgGreen.open,
-        styles.bgColor.bgGreen.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[1].match(re), badge('bgGreen'));
     t.is(inspect.output[2].replace(re, ''), '<INFO>\n');
-    t.deepEqual(inspect.output[2].match(re), [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgBlue.open,
-        styles.bgColor.bgBlue.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[2].match(re), badge('bgBlue'));
     t.is(inspect.output[3].replace(re, ''), '<WARN>\n');
-    t.deepEqual(inspect.output[3].match(re), [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgYellow.open,
-        styles.bgColor.bgYellow.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[3].match(re), badge('bgYellow'));
     t.is(inspect.output[4].replace(re, ''), '<ERROR>\n');
-    t.deepEqual(inspect.output[4].match(re), [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgRed.open,
-        styles.bgColor.bgRed.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[4].match(re), badge('bgRed'));
+    t.is(inspect.output[5].replace(re, ''), '<TRACE>\n');
+    t.deepEqual(inspect.output[5].match(re), badge('bgBlack'));
+    t.is(inspect.output[6].replace(re, ''), '<DEBUG>\n');
+    t.deepEqual(inspect.output[6].match(re), badge('bgGreen'));
+    t.is(inspect.output[7].replace(re, ''), '<INFO>\n');
+    t.deepEqual(inspect.output[7].match(re), badge('bgBlue'));
+    t.is(inspect.output[8].replace(re, ''), '<WARN>\n');
+    t.deepEqual(inspect.output[8].match(re), badge('bgYellow'));
+    t.is(inspect.output[9].replace(re, ''), '<ERROR>\n');
+    t.deepEqual(inspect.output[9].match(re), badge('bgRed'));
+    t.is(inspect.output[10], '\n');
+    t.is(inspect.output[11], '\n');
 });
 
 test('full log', t => {
