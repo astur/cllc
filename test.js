@@ -37,14 +37,21 @@ test('dateFormat', t => {
     log();
     log.dateFormat('TEST');
     log();
+    log.dateFormat(42);
+    log();
     inspect.restore();
     t.true(/^\[\d\d\d\d-\d\d-\d\d\]/.test(inspect.output[0].replace(re, '')));
     t.is(inspect.output[1].replace(re, ''), '[TEST]\n');
+    t.is(inspect.output[2].replace(re, ''), '[TEST]\n');
     t.deepEqual(inspect.output[0].match(re), [
         styles.color.white.open,
         styles.color.white.close,
     ]);
     t.deepEqual(inspect.output[1].match(re), [
+        styles.color.white.open,
+        styles.color.white.close,
+    ]);
+    t.deepEqual(inspect.output[2].match(re), [
         styles.color.white.open,
         styles.color.white.close,
     ]);
