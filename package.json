@@ -1,6 +1,6 @@
 {
   "name": "cllc",
-  "version": "0.1.1",
+  "version": "0.1.2",
   "description": "Simple logger and counter fore console",
   "main": "index.js",
   "author": "astur <astur@yandex.ru> (http://kozlov.am/)",
