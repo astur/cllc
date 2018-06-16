@@ -257,3 +257,28 @@ test('counter finishing', t => {
         styles.color.white.close,
     ]);
 });
+
+test('counter with logging', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, null);
+    log.start();
+    log.step();
+    log('TEST');
+    log.step();
+    log.stop();
+    // t.is(inspect.output.length, 5);
+    t.is(inspect.output[2].replace(re, ''), 'TEST\n');
+    inspect.restore();
+    t.deepEqual(inspect.output[2].match(re), [
+        escapes.eraseLine,
+        escapes.cursorUp(),
+        escapes.eraseLine,
+        escapes.cursorLeft,
+        styles.color.gray.open,
+        styles.color.gray.close,
+    ]);
+    t.deepEqual(inspect.output[3].match(re), [
+        styles.color.white.open,
+        styles.color.white.close,
+    ]);
+});
