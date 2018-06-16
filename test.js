@@ -266,7 +266,7 @@ test('counter with logging', t => {
     log('TEST');
     log.step();
     log.stop();
-    // t.is(inspect.output.length, 5);
+    t.is(inspect.output.length, 6);
     t.is(inspect.output[2].replace(re, ''), 'TEST\n');
     inspect.restore();
     t.deepEqual(inspect.output[2].match(re), [
@@ -281,4 +281,20 @@ test('counter with logging', t => {
         styles.color.white.open,
         styles.color.white.close,
     ]);
+});
+
+test('isTTY false counter', t => {
+    const inspect = stdout.inspect({isTTY: false});
+    const log = cllc(null, null);
+    log.start();
+    log.step();
+    log('TEST');
+    log.step();
+    log.stop();
+    log.start();
+    log.inc(1);
+    log.finish();
+    t.is(inspect.output.length, 1);
+    t.is(inspect.output[0], 'TEST\n');
+    inspect.restore();
 });
