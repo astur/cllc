@@ -5,12 +5,33 @@ const re = require('ansi-regex')();
 const styles = require('ansi-styles');
 const escapes = require('ansi-escapes');
 
+const _badge = color => [
+    styles.color.white.open,
+    styles.modifier.bold.open,
+    styles.bgColor[color].open,
+    styles.bgColor[color].close,
+    styles.modifier.bold.close,
+    styles.color.white.close,
+];
+
+const _color = color => [
+    styles.color[color].open,
+    styles.color[color].close,
+];
+
+const _erase = [
+    escapes.eraseLine,
+    escapes.cursorUp(),
+    escapes.eraseLine,
+    escapes.cursorLeft,
+];
+
 test('empty', t => {
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log();
-    inspect.restore();
     t.is(inspect.output[0], '\n');
+    inspect.restore();
 });
 
 test('simple log', t => {
@@ -18,17 +39,11 @@ test('simple log', t => {
     const log = cllc(null, null);
     log('TEST');
     log('TEST1', 'TEST2');
-    inspect.restore();
     t.is(inspect.output[0].replace(re, ''), 'TEST\n');
     t.is(inspect.output[1].replace(re, ''), 'TEST1 TEST2\n');
-    t.deepEqual(inspect.output[0].match(re), [
-        styles.color.gray.open,
-        styles.color.gray.close,
-    ]);
-    t.deepEqual(inspect.output[1].match(re), [
-        styles.color.gray.open,
-        styles.color.gray.close,
-    ]);
+    t.deepEqual(inspect.output[0].match(re), _color('gray'));
+    t.deepEqual(inspect.output[1].match(re), _color('gray'));
+    inspect.restore();
 });
 
 test('dateFormat', t => {
@@ -39,22 +54,13 @@ test('dateFormat', t => {
     log();
     log.dateFormat(42);
     log();
-    inspect.restore();
     t.true(/^\[\d\d\d\d-\d\d-\d\d\]/.test(inspect.output[0].replace(re, '')));
     t.is(inspect.output[1].replace(re, ''), '[TEST]\n');
     t.is(inspect.output[2].replace(re, ''), '[TEST]\n');
-    t.deepEqual(inspect.output[0].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
-    t.deepEqual(inspect.output[1].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
-    t.deepEqual(inspect.output[2].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[0].match(re), _color('white'));
+    t.deepEqual(inspect.output[1].match(re), _color('white'));
+    t.deepEqual(inspect.output[2].match(re), _color('white'));
+    inspect.restore();
 });
 
 test('tags', t => {
@@ -65,29 +71,15 @@ test('tags', t => {
     log();
     log.tag(module);
     log();
-    inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '(TEST)\n');
-    t.deepEqual(inspect.output[0].match(re), [
-        styles.color.cyan.open,
-        styles.color.cyan.close,
-    ]);
+    t.deepEqual(inspect.output[0].match(re), _color('cyan'));
     t.false(re.test(inspect.output[1]));
     t.is(inspect.output[2].replace(re, ''), '(cllc/test)\n');
-    t.deepEqual(inspect.output[2].match(re), [
-        styles.color.cyan.open,
-        styles.color.cyan.close,
-    ]);
+    t.deepEqual(inspect.output[2].match(re), _color('cyan'));
+    inspect.restore();
 });
 
 test('levels', t => {
-    const badge = color => [
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor[color].open,
-        styles.bgColor[color].close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-    ];
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log.t();
@@ -109,72 +101,54 @@ test('levels', t => {
     log();
     log.level('bad level');
     log();
-    inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '<TRACE>\n');
-    t.deepEqual(inspect.output[0].match(re), badge('bgBlack'));
+    t.deepEqual(inspect.output[0].match(re), _badge('bgBlack'));
     t.is(inspect.output[1].replace(re, ''), '<DEBUG>\n');
-    t.deepEqual(inspect.output[1].match(re), badge('bgGreen'));
+    t.deepEqual(inspect.output[1].match(re), _badge('bgGreen'));
     t.is(inspect.output[2].replace(re, ''), '<INFO>\n');
-    t.deepEqual(inspect.output[2].match(re), badge('bgBlue'));
+    t.deepEqual(inspect.output[2].match(re), _badge('bgBlue'));
     t.is(inspect.output[3].replace(re, ''), '<WARN>\n');
-    t.deepEqual(inspect.output[3].match(re), badge('bgYellow'));
+    t.deepEqual(inspect.output[3].match(re), _badge('bgYellow'));
     t.is(inspect.output[4].replace(re, ''), '<ERROR>\n');
-    t.deepEqual(inspect.output[4].match(re), badge('bgRed'));
+    t.deepEqual(inspect.output[4].match(re), _badge('bgRed'));
     t.is(inspect.output[5].replace(re, ''), '<TRACE>\n');
-    t.deepEqual(inspect.output[5].match(re), badge('bgBlack'));
+    t.deepEqual(inspect.output[5].match(re), _badge('bgBlack'));
     t.is(inspect.output[6].replace(re, ''), '<DEBUG>\n');
-    t.deepEqual(inspect.output[6].match(re), badge('bgGreen'));
+    t.deepEqual(inspect.output[6].match(re), _badge('bgGreen'));
     t.is(inspect.output[7].replace(re, ''), '<INFO>\n');
-    t.deepEqual(inspect.output[7].match(re), badge('bgBlue'));
+    t.deepEqual(inspect.output[7].match(re), _badge('bgBlue'));
     t.is(inspect.output[8].replace(re, ''), '<WARN>\n');
-    t.deepEqual(inspect.output[8].match(re), badge('bgYellow'));
+    t.deepEqual(inspect.output[8].match(re), _badge('bgYellow'));
     t.is(inspect.output[9].replace(re, ''), '<ERROR>\n');
-    t.deepEqual(inspect.output[9].match(re), badge('bgRed'));
+    t.deepEqual(inspect.output[9].match(re), _badge('bgRed'));
     t.is(inspect.output[10], '\n');
     t.is(inspect.output[11], '\n');
+    inspect.restore();
 });
 
 test('full log', t => {
     const inspect = stdout.inspect();
     const log = cllc('TAG');
     log.i('TEST');
-    inspect.restore();
     t.true(/^\[\d\d:\d\d:\d\d\] <INFO> \(TAG\) TEST/.test(inspect.output[0].replace(re, '').trim()));
     t.deepEqual(inspect.output[0].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.modifier.bold.open,
-        styles.bgColor.bgBlue.open,
-        styles.bgColor.bgBlue.close,
-        styles.modifier.bold.close,
-        styles.color.white.close,
-        styles.color.cyan.open,
-        styles.color.cyan.close,
-        styles.color.gray.open,
-        styles.color.gray.close,
+        ..._color('white'),
+        ..._badge('bgBlue'),
+        ..._color('cyan'),
+        ..._color('gray'),
     ]);
+    inspect.restore();
 });
 
 test('isTTY false log', t => {
     const inspect = stdout.inspect({isTTY: false});
     const log = cllc('TAG');
     log.i('TEST');
-    inspect.restore();
     t.false(re.test(inspect.output[0]));
+    inspect.restore();
 });
 
 test('counter start', t => {
-    const white = [
-        styles.color.white.open,
-        styles.color.white.close,
-    ];
-    const erase = [
-        escapes.eraseLine,
-        escapes.cursorUp(),
-        escapes.eraseLine,
-        escapes.cursorLeft,
-    ];
     const inspect = stdout.inspect();
     const log = cllc(null, null);
     log.start('#%s|%s#');
@@ -187,13 +161,24 @@ test('counter start', t => {
     t.is(log.text(), '#%s|%s|%s#');
     t.deepEqual(log.counters(), [42, 0, 0]);
     log.stop();
-    inspect.restore();
     t.is(inspect.output[0].replace(re, ''), '#0|0#\n');
-    t.deepEqual(inspect.output[0].match(re), [...white, ...white]);
+    t.deepEqual(inspect.output[0].match(re), [
+        ..._color('white'),
+        ..._color('white'),
+    ]);
     t.is(inspect.output[1].replace(re, ''), '0\n');
-    t.deepEqual(inspect.output[1].match(re), [...erase, ...white]);
+    t.deepEqual(inspect.output[1].match(re), [
+        ..._erase,
+        ..._color('white'),
+    ]);
     t.is(inspect.output[2].replace(re, ''), '#42|0|0#\n');
-    t.deepEqual(inspect.output[2].match(re), [...erase, ...white, ...white, ...white]);
+    t.deepEqual(inspect.output[2].match(re), [
+        ..._erase,
+        ..._color('white'),
+        ..._color('white'),
+        ..._color('white'),
+    ]);
+    inspect.restore();
 });
 
 test('counter steps', t => {
@@ -212,20 +197,15 @@ test('counter steps', t => {
     t.deepEqual(log.counters(), [2, 2]);
     t.is(inspect.output[3].replace(re, ''), '#2|2#\n');
     log.stop();
-    inspect.restore();
     const codes = [
-        escapes.eraseLine,
-        escapes.cursorUp(),
-        escapes.eraseLine,
-        escapes.cursorLeft,
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
+        ..._erase,
+        ..._color('white'),
+        ..._color('white'),
     ];
     t.deepEqual(inspect.output[1].match(re), codes);
     t.deepEqual(inspect.output[2].match(re), codes);
     t.deepEqual(inspect.output[3].match(re), codes);
+    inspect.restore();
 });
 
 test('counter finishing', t => {
@@ -251,37 +231,24 @@ test('counter finishing', t => {
     log.finish('#%s|%s|%s#');
     t.is(inspect.output[7].replace(re, ''), '#0|0|0#\n');
     t.is(inspect.output.length, 8);
-    inspect.restore();
-    const codes = [
-        escapes.eraseLine,
-        escapes.cursorUp(),
-        escapes.eraseLine,
-        escapes.cursorLeft,
-    ];
-    t.deepEqual(inspect.output[1].match(re), codes);
+    t.deepEqual(inspect.output[1].match(re), _erase);
     t.deepEqual(inspect.output[3].match(re), [
-        ...codes,
-        styles.color.white.open,
-        styles.color.white.close,
+        ..._erase,
+        ..._color('white'),
     ]);
     t.deepEqual(inspect.output[5].match(re), [
-        ...codes,
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
+        ..._erase,
+        ..._color('white'),
+        ..._color('white'),
+        ..._color('white'),
     ]);
     t.deepEqual(inspect.output[7].match(re), [
-        ...codes,
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
-        styles.color.white.open,
-        styles.color.white.close,
+        ..._erase,
+        ..._color('white'),
+        ..._color('white'),
+        ..._color('white'),
     ]);
+    inspect.restore();
 });
 
 test('counter with logging', t => {
@@ -294,19 +261,12 @@ test('counter with logging', t => {
     log.stop();
     t.is(inspect.output.length, 6);
     t.is(inspect.output[2].replace(re, ''), 'TEST\n');
-    inspect.restore();
     t.deepEqual(inspect.output[2].match(re), [
-        escapes.eraseLine,
-        escapes.cursorUp(),
-        escapes.eraseLine,
-        escapes.cursorLeft,
-        styles.color.gray.open,
-        styles.color.gray.close,
+        ..._erase,
+        ..._color('gray'),
     ]);
-    t.deepEqual(inspect.output[3].match(re), [
-        styles.color.white.open,
-        styles.color.white.close,
-    ]);
+    t.deepEqual(inspect.output[3].match(re), _color('white'));
+    inspect.restore();
 });
 
 test('isTTY false counter', t => {
