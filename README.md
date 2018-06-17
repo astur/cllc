@@ -6,6 +6,8 @@ There is a logger and counter two-in-one. And log messages do not erase counter 
 
 [![NPM version][npm-image]][npm-url]
 
+![](screencast.gif)
+
 ## Install
 
 ```bash
