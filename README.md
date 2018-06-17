@@ -4,6 +4,7 @@
 
 There is a logger and counter two-in-one. And log messages do not erase counter text. Perfect for work process indication in long-time scripts.
 
+[![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
 
 ![](screencast.gif)
@@ -183,3 +184,5 @@ MIT
 
 [npm-url]: https://npmjs.org/package/cllc
 [npm-image]: https://badge.fury.io/js/cllc.svg
+[travis-url]: https://travis-ci.org/astur/cllc
+[travis-image]: https://travis-ci.org/astur/cllc.svg?branch=master
