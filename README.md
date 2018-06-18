@@ -1,13 +1,26 @@
 # cllc
 
-`C`ommand `L`ine `L`ogger and `C`ounter
-
-There is a logger and counter two-in-one. And log messages do not erase counter text. Perfect for work process indication in long-time scripts.
+`C`ommand `L`ine `L`ogger and `C`ounter for console.
 
 [![Build Status][travis-image]][travis-url]
 [![NPM version][npm-image]][npm-url]
 
 ![](screencast.gif)
+
+## Features
+
+* nice colored log messages with configurable timestamps, tags and log level labels.
+* console indicator with easy incrementable counters
+* logger and counter works together without erasing or rewriting each other.
+* automatic 'file mode' (no colors, no counters) if output piped to file or other shell stream.
+
+## Why?
+
+Because some scripts works for a long time and need pretty good console indicators for monitoring how they are. But some of them are too easy for [blessed-contrib](https://github.com/yaronn/blessed-contrib) or even for [winston](https://github.com/winstonjs/winston). For example, long queues of http requests or database queries. I developed this module for scraping scripts, but it can be used a lot wherever else.
+
+## Contributing
+
+No any specific rules for now. Just open issue or create PR if you want.
 
 ## Install
 
@@ -19,19 +32,48 @@ npm install cllc
 
 ### Logger
 
-Logger output to console log string that consists of timestamp, log level label, logger tag and log message. Only timestamp is not optional.
-
 ```js
 const log = require('cllc')();
+
 // //or//
-// const log = require('cllc')('TAG', '%F %T'); // default tag and date format (see below)
+// const log = require('cllc')('TAG', '%F %T');
+// default tag and date format (see below)
 
 log('Sample message');
 ```
 
+#### Log messages
+
+It's important, that log message is not required. `cllc` can output string with only timestamp/label/tag (if not empty). If any params sent to `log` then log message will be created same way as in `util.format`.
+
+```js
+log('This is a log message string', 'This is another log message string');
+log(); //log string without message
+log({a: 1}, [1, 2], new Date(), null); // same way as in `util.format`
+```
+
+#### Log level labels
+
+Default log level label is empty (nothing printed) but you can set default label or specify it explicitly for every log string.
+
+```js
+log('log string with empty log level label (default)');
+log.trace('log string with label <TRACE>'); //short form is log.t
+log.debug('log string with label <DEBUG>'); //short form is log.d
+log.info('log string with label <INFO>');   //short form is log.i
+log.warn('log string with label <WARN>');   //short form is log.w
+log.error('log string with label <ERROR>'); //short form is log.e
+
+log.level('trace'); //set default log level label to <TRACE>
+log.level('error'); //set default log level label to <ERROR>
+log.level();        //set empty default log level label
+```
+
+Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`. Any other parameter in `log.level` sets empty default log level label.
+
 #### Timestamps
 
-Timestamps are formatting by [strftime](https://github.com/samsonjs/strftime). By default format string is `'%T'`, but you can change it at any time. Like this:
+Timestamps are formatted by [strftime](https://github.com/samsonjs/strftime). By default format string is `'%T'`, but you can change it at any time. Like this:
 
 ```js
 const log = require('cllc')(null, '%F %T');
@@ -57,25 +99,6 @@ log.dateFormat();
 ```
 Any parameter of `log.dateFormat` that is not a string or falsy  will be ignored.
 
-#### Log level labels
-
-Default log level label is empty (nothing printed) but you can set default label or specify it explicitly for every log string.
-
-```js
-log('log string with default log level label');
-log.trace('log string with label <TRACE>'); //short form is log.t
-log.debug('log string with label <DEBUG>'); //short form is log.d
-log.info('log string with label <INFO>'); //short form is log.i
-log.warn('log string with label <WARN>'); //short form is log.w
-log.error('log string with label <ERROR>'); //short form is log.e
-
-log.level('trace'); //set default log level label to <TRACE>
-log.level('error'); //set default log level label to <ERROR>
-log.level(); //set empty default log level label
-```
-
-Five log levels are possible: `trace`, `debug`, `info`, `warn` and `error`. Any other parameter in `log.level` sets empty default log level label.
-
 #### Logger tags
 
 Usually tags used if you want to identify several loggers from different modules or functions. Tag is just a short string. By default tag is empty, but you can specify it any time. Like this:
@@ -94,16 +117,6 @@ You can use `module` variable on `cllc` init or as parameter of `log.tag`. In th
 ```js
 const log = require('cllc')(module);
 log('log string with something like "my-module/index" in tag');
-```
-
-#### Log messages
-
-It's important, that log message is not required. `cllc` can output string with only timestamp/label/tag (if not empty). If any params sent to `log*` functions then log message will be created same way as in `util.format`.
-
-```js
-log('This is a log message string', 'This is another log message string');
-log(); //log string without message
-log({a: 1}, [1, 2], new Date(), null); // same way as in `util.format`
 ```
 
 ### Counter
@@ -176,6 +189,14 @@ log.finish();
 // result output
 // TEST
 // [0]
+```
+
+### 'file mode'
+
+If you want pipe log to file - just do it. It is not necessary to code changes or configs. `cllc` can detect that script runs not in TTY and suppress colors and counters automaticly. You can test it this way:
+
+```bash
+node your-script.js | cat
 ```
 
 ## License
