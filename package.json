@@ -31,6 +31,12 @@
   },
   "keywords": [
     "logger",
+    "counter",
+    "tty",
+    "log",
+    "logging",
+    "indicator",
+    "monitoring",
     "cli"
   ],
   "license": "MIT"
