@@ -186,9 +186,9 @@ log.step();
 log('TEST');
 log.finish();
 
-// result output
+// result output:
 // TEST
-// [0]
+// [1]
 ```
 
 ### 'file mode'

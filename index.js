@@ -91,13 +91,13 @@ module.exports = function(tag, dateFormat = '%T'){
         lU.clear();
     };
 
-    log.finish = (text = _text, ...args) => {
+    log.finish = (text, ...args) => {
         if(!process.stdout.isTTY || !_text) return;
-        _text = text;
-        const tl = _text.split(/%s/).length - 1;
-        const zeros = Array(tl).fill(0);
-        args = args.length ? args.map(v => +v || 0) : zeros;
-        _i = Object.assign(zeros, args.slice(0, tl));
+        if(text){
+            _text = text;
+            const tl = _text.split(/%s/).length - 1;
+            _i = Object.assign(Array(tl).fill(0), args.slice(0, tl).map(v => +v || 0));
+        }
         lU.show();
         _text = '';
         lU.done();
