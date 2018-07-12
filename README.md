@@ -119,6 +119,28 @@ const log = require('cllc')(module);
 log('log string with something like "my-module/index" in tag');
 ```
 
+#### Pretty errors
+
+When log level is 'error' and only argument is an instance of Error, then output will be prettified by [errsome](https://github.com/astur/errsome).
+
+```js
+log.e(new Error('TEST')); // will output something like this:
+
+// [01:01:01] <ERROR>
+// { name: 'Error',
+//   message: 'TEST',
+//   stack:
+//    [ 'at Object.<anonymous> (/Users/astur/js/github/cllc/_test.js:9:7)',
+//      'at Module._compile (module.js:624:30)',
+//      'at Object.Module._extensions..js (module.js:635:10)',
+//      'at Module.load (module.js:545:32)',
+//      'at tryModuleLoad (module.js:508:12)',
+//      'at Function.Module._load (module.js:500:3)',
+//      'at Function.Module.runMain (module.js:665:10)',
+//      'at startup (bootstrap_node.js:187:16)',
+//      'at bootstrap_node.js:607:3' ] }
+```
+
 ### Counter
 
 Counter is a text in the end of console, contains digital value(s) that are incrementing step by step.
