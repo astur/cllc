@@ -2,6 +2,7 @@ const strftime = require('strftime');
 const chalk = require('chalk');
 const format = require('util').format;
 const lU = require('log-update');
+const errsome = require('errsome');
 
 const _levels = {
     trace: chalk.white.bold.bgBlack('<TRACE>'),
@@ -31,7 +32,13 @@ module.exports = function(tag, dateFormat = '%T'){
         if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
         if(ll) a.push(ll);
         if(tag) a.push(chalk.cyan(`(${tag})`));
-        if(args.length) a.push(chalk.gray(format(...args)));
+        if(args.length){
+            if(args.length === 1 && l === 'error' && args[0] instanceof Error){
+                a.push(chalk.gray(format('\n', errsome(args[0]))));
+            } else {
+                a.push(chalk.gray(format(...args)));
+            }
+        }
 
         lU(...process.stdout.isTTY ? a : a.map(s => s.replace(require('ansi-regex')(), '')));
         lU.done();

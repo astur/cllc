@@ -126,6 +126,14 @@ test('levels', t => {
     inspect.restore();
 });
 
+test('pretty error', t => {
+    const inspect = stdout.inspect();
+    const log = cllc(null, null);
+    log.e(new Error());
+    t.true(/<ERROR>[\s\S]*name[\s\S]*message[\s\S]*stack/.test(inspect.output[0]));
+    inspect.restore();
+});
+
 test('full log', t => {
     const inspect = stdout.inspect();
     const log = cllc('TAG');
