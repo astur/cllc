@@ -3,6 +3,7 @@ const chalk = require('chalk');
 const format = require('util').format;
 const lU = require('log-update');
 const errsome = require('errsome');
+const ansiRegex = require('ansi-regex')();
 
 const _levels = {
     trace: chalk.white.bold.bgBlack('<TRACE>'),
@@ -22,8 +23,10 @@ const _countStr = () => _text
 
 lU.show = () => lU(_countStr());
 
-module.exports = function(tag, dateFormat = '%T'){
-    let level;
+module.exports = function(t, df = '%T'){
+    let level = null;
+    let tag = t;
+    let dateFormat = df;
 
     const _log = l => (...args) => {
         const a = [];
@@ -32,7 +35,7 @@ module.exports = function(tag, dateFormat = '%T'){
         if(dateFormat) a.push(chalk.white(`[${strftime(dateFormat)}]`));
         if(ll) a.push(ll);
         if(tag) a.push(chalk.cyan(`(${tag})`));
-        if(args.length){
+        if(args.length > 0){
             if(args.length === 1 && l === 'error' && args[0] instanceof Error){
                 a.push(chalk.gray(format('\n', errsome(args[0]))));
             } else {
@@ -40,7 +43,7 @@ module.exports = function(tag, dateFormat = '%T'){
             }
         }
 
-        lU(...process.stdout.isTTY ? a : a.map(s => s.replace(require('ansi-regex')(), '')));
+        lU(...process.stdout.isTTY ? a : a.map(s => s.replace(ansiRegex, '')));
         lU.done();
         if(_text) lU.show();
     };
@@ -54,7 +57,7 @@ module.exports = function(tag, dateFormat = '%T'){
     log.e = log.error = _log('error');
 
     log.level = l => {
-        level = _levels[l] ? l : undefined;
+        level = _levels[l] ? l : null;
     };
 
     log.dateFormat = dF => {
@@ -74,15 +77,15 @@ module.exports = function(tag, dateFormat = '%T'){
         _text = text;
         const tl = _text.split(/%s/).length - 1;
         const zeros = Array(tl).fill(0);
-        args = args.length ? args.map(v => +v || 0) : zeros;
-        _i = Object.assign(zeros, args.slice(0, tl));
+        const steps = args.length > 0 ? args.map(v => +v || 0) : zeros;
+        _i = Object.assign(zeros, steps.slice(0, tl));
         lU.show();
     };
 
     log.step = (...args) => {
         if(!process.stdout.isTTY || !_text) return;
-        args = args.length ? args : [1];
-        _i = _i.map((v, i) => v + (+args[i] || 0));
+        const steps = args.length > 0 ? args : [1];
+        _i = _i.map((v, i) => v + (+steps[i] || 0));
         lU.show();
     };
 
