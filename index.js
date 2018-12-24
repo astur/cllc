@@ -17,7 +17,7 @@ let _i = [];
 let _text = '';
 
 const _countStr = () => _text
-    .split(/%s/)
+    .split('%s')
     .map((v, i) => v + (i === _i.length ? '' : chalk.white(_i[i])))
     .join('');
 
@@ -75,7 +75,7 @@ module.exports = function(t, df = '%T'){
     log.start = (text = '%s', ...args) => {
         if(!process.stdout.isTTY || !text || typeof text !== 'string') return;
         _text = text;
-        const tl = _text.split(/%s/).length - 1;
+        const tl = _text.split('%s').length - 1;
         const zeros = Array(tl).fill(0);
         const steps = args.length > 0 ? args.map(v => +v || 0) : zeros;
         _i = Object.assign(zeros, steps.slice(0, tl));
@@ -105,7 +105,7 @@ module.exports = function(t, df = '%T'){
         if(!process.stdout.isTTY || !_text) return;
         if(text){
             _text = text;
-            const tl = _text.split(/%s/).length - 1;
+            const tl = _text.split('%s').length - 1;
             _i = Object.assign(Array(tl).fill(0), args.slice(0, tl).map(v => +v || 0));
         }
         lU.show();
