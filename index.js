@@ -43,9 +43,13 @@ module.exports = function(t, df = '%T'){
             }
         }
 
-        lU(...process.stdout.isTTY ? a : a.map(s => s.replace(ansiRegex, '')));
-        lU.done();
-        if(_text) lU.show();
+        if(process.stdout.isTTY){
+            lU(...a);
+            lU.done();
+            if(_text) lU.show();
+        } else {
+            console.log(a.map(s => s.replace(ansiRegex, '')).join(' '));
+        }
     };
 
     const log = _log();
