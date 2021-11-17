@@ -70,7 +70,7 @@ module.exports = function(t, df = '%T'){
 
     log.tag = t => {
         tag = t && t.id && t.exports && t.filename && t.paths ?
-            t.filename.split(/[\\/]/).slice(-2).join('/').split('.')[0] :
+            t.filename.split(/[/\\]/).slice(-2).join('/').split('.')[0] :
             typeof t === 'string' ? t : undefined;
     };
 
@@ -117,7 +117,7 @@ module.exports = function(t, df = '%T'){
         lU.done();
     };
 
-    log.counters = () => _i.slice();
+    log.counters = () => [..._i];
     log.text = () => _text;
 
     return log;

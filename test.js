@@ -54,7 +54,7 @@ test('dateFormat', t => {
     log();
     log.dateFormat(42);
     log();
-    t.true(/^\[\d\d\d\d-\d\d-\d\d\]/.test(inspect.output[0].replace(re, '')));
+    t.true(/^\[\d{4}-\d{2}-\d{2}]/.test(inspect.output[0].replace(re, '')));
     t.is(inspect.output[1].replace(re, ''), '[TEST]\n');
     t.is(inspect.output[2].replace(re, ''), '[TEST]\n');
     t.deepEqual(inspect.output[0].match(re), _color('white'));
@@ -129,8 +129,8 @@ test('levels', t => {
 test('pretty error', t => {
     const inspect = stdout.inspect();
     const log = cllc(null, null);
-    log.e(new Error());
-    t.true(/<ERROR>[\s\S]*name[\s\S]*message[\s\S]*stack/.test(inspect.output[0]));
+    log.e(new Error('test'));
+    t.true(/<ERROR>[\S\s]*name[\S\s]*message[\S\s]*stack/.test(inspect.output[0]));
     inspect.restore();
 });
 
@@ -138,7 +138,7 @@ test('full log', t => {
     const inspect = stdout.inspect();
     const log = cllc('TAG');
     log.i('TEST');
-    t.true(/^\[\d\d:\d\d:\d\d\] <INFO> \(TAG\) TEST/.test(inspect.output[0].replace(re, '').trim()));
+    t.true(/^\[\d\d:\d\d:\d\d] <INFO> \(TAG\) TEST/.test(inspect.output[0].replace(re, '').trim()));
     t.deepEqual(inspect.output[0].match(re), [
         ..._color('white'),
         ..._badge('bgBlue'),
