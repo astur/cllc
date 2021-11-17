@@ -15,19 +15,19 @@
     "node": ">=8.0.0"
   },
   "dependencies": {
-    "ansi-regex": "^3.0.0",
+    "ansi-regex": "^5.0.1",
     "chalk": "^2.3.2",
     "errsome": "^1.0.1",
-    "log-update": "^2.3.0",
+    "log-update": "^4.0.0",
     "strftime": "^0.10.0"
   },
   "devDependencies": {
     "ansi-escapes": "^3.1.0",
     "ansi-styles": "^3.2.1",
     "ava": "^0.25.0",
-    "eslint": "^5.4.0",
-    "eslint-config-astur": "^1.6.1",
-    "nyc": "^12.0.2",
+    "eslint": "^7.32.0",
+    "eslint-config-astur": "^1.7.0",
+    "nyc": "^15.1.0",
     "test-console": "^1.1.0"
   },
   "keywords": [
