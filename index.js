@@ -44,8 +44,8 @@ module.exports = function(t, df = '%T'){
         }
 
         if(process.stdout.isTTY){
-            lU(...a);
-            lU.done();
+            if(_text) lU.clear();
+            console.log(a.join(' '));
             if(_text) lU.show();
         } else {
             console.log(a.map(s => s.replace(ansiRegex, '')).join(' '));
