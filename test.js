@@ -268,13 +268,9 @@ test('counter with logging', t => {
     log('TEST');
     log.step();
     log.stop();
-    t.is(inspect.output.length, 6);
-    t.is(inspect.output[2].replace(re, ''), 'TEST\n');
-    t.deepEqual(inspect.output[2].match(re), [
-        ..._erase,
-        ..._color('gray'),
-    ]);
-    t.deepEqual(inspect.output[3].match(re), _color('white'));
+    t.is(inspect.output.length, 7);
+    t.is(inspect.output[3].replace(re, ''), 'TEST\n');
+    t.deepEqual(inspect.output[4].match(re), _color('white'));
     inspect.restore();
 });
 
