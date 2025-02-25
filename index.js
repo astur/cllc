@@ -1,7 +1,7 @@
 const strftime = require('strftime');
 const chalk = require('chalk');
 const format = require('util').format;
-const lU = require('log-update');
+const logUpdate = require('log-update');
 const errsome = require('errsome');
 const ansiRegex = require('ansi-regex')();
 
@@ -21,6 +21,7 @@ const _countStr = () => _text
     .map((v, i) => v + (i === _i.length ? '' : chalk.white(_i[i])))
     .join('');
 
+const lU = logUpdate.create(process.stdout, {showCursor: true});
 lU.show = () => lU(_countStr());
 
 module.exports = function(t, df = '%T'){
